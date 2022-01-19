@@ -1,4 +1,4 @@
-FROM ghcr.io/drpayyne/php-cli
+FROM ghcr.io/vadimbeliak/php-cli
 
 ARG TARGETARCH
 

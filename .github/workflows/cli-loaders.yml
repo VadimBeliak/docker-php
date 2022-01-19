@@ -1,6 +1,16 @@
 name: PHP CLI with Loaders
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      php74:
+        description: "PHP 7.4 (latest)"
+        default: '0'
+        required: false
+      php73:
+        description: "PHP 7.3"
+        default: '0'
+        required: false
 
 jobs:
   docker:
