@@ -1,24 +1,25 @@
-FROM fedora:34
+FROM ubuntu:18.04
 
 ARG PHP_VERSION
 ARG PHP_EXTENSIONS="bcmath cli common gd gmp intl json mbstring \
     mcrypt sodium mysqlnd opcache pdo pecl-msgpack pecl-amqp pecl-redis pecl-imagick pecl-zip process soap xml xmlrpc"
 
-RUN dnf update -y \
-    && dnf clean all \
-    && rm -rf /var/cache/dnf
+RUN apt update
+# RUN apt install -y \
+    # && dnf clean all \
+    # && rm -rf /var/cache/dnf
 
 RUN set -eux \
-    && dnf install -y php \
+    && apt install -y php \
     && PHP_VERSION=$(echo ${PHP_VERSION} | awk -F '.' '{print $1$2}') \
     && PHP_PACKAGES= && for PKG in ${PHP_EXTENSIONS}; do \
         if [[ ${PKG} = "mcrypt" ]] && (( ${PHP_VERSION} > 71 )); then continue; fi; \
         if [[ ${PKG} = "sodium" ]] && (( ${PHP_VERSION} < 72 )); then continue; fi; \
         PHP_PACKAGES+="php-${PKG} "; \
     done \
-    && dnf install -y ${PHP_PACKAGES} git perl which npm patch gettext unzip bzip2 pwgen nmap-ncat jq \
-    && dnf clean all \
-    && rm -rf /var/cache/dnf
+    && apt install -y ${PHP_PACKAGES} git perl which npm patch gettext unzip bzip2 pwgen nmap-ncat jq 
+    # && apt clean all \
+    # && rm -rf /var/cache/dnf
 
 RUN set -eux \
     && cp /etc/php.ini /etc/php-cli.ini \
